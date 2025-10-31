@@ -95,8 +95,8 @@ int trace_connect_v4_return(struct pt_regs *ctx)
     data4.uid = bpf_get_current_uid_gid() & 0xffffffff;
 	data4.ppid= BPF_CORE_READ(task,real_parent,pid);
     bpf_core_read(&data4.start_time,sizeof(data4.start_time),bpf_map_lookup_elem(&curtime,&tid)); // 获取tcp连接开始时间
-    //data4.sid = BPF_CORE_READ(task,group_leader,pids[PIDTYPE_SID].pid,numbers[0].nr); //该字段的采集方式需要关注。
-    data4.sid = 0;
+    data4.sid = BPF_CORE_READ(task,group_leader,pids[PIDTYPE_SID].pid,numbers[0].nr); //该字段的采集方式需要关注。
+    //data4.sid = 0;
     bpf_get_current_comm(&data4.comm,sizeof(data4.comm));
 
     //获取进程命令行

@@ -98,8 +98,8 @@ int kretprobe_execve_info(struct pt_regs *ctx) {
 	event.ppid= BPF_CORE_READ(task,real_parent,pid);
     //event.start_time = BPF_CORE_READ(task,start_time)/NANOSECOND;
     //event.start_time = bpf_ktime_get_ns()/NANOSECOND;
-    //event.sid = BPF_CORE_READ(task,group_leader,pids[PIDTYPE_SID].pid,numbers[0].nr); //该字段的采集方式需要关注。
-    event.sid = 0;
+    event.sid = BPF_CORE_READ(task,group_leader,pids[PIDTYPE_SID].pid,numbers[0].nr); //该字段的采集方式需要关注。
+    //event.sid = 0;
     //获取进程执行参数
     daddr = BPF_CORE_READ(task,mm,arg_start);
     event.arg_size = BPF_CORE_READ(task,mm,arg_end)-daddr;
