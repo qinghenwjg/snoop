@@ -70,7 +70,6 @@ type bpf_tcpMapSpecs struct {
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpf_tcpVariableSpecs struct {
-	UnusedBaseinfo *ebpf.VariableSpec `ebpf:"unused_baseinfo"`
 }
 
 // bpf_tcpObjects contains all objects after they have been loaded into the kernel.
@@ -108,7 +107,6 @@ func (m *bpf_tcpMaps) Close() error {
 //
 // It can be passed to loadBpf_tcpObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpf_tcpVariables struct {
-	UnusedBaseinfo *ebpf.Variable `ebpf:"unused_baseinfo"`
 }
 
 // bpf_tcpPrograms contains all programs after they have been loaded into the kernel.
