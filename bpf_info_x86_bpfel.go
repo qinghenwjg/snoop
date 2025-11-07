@@ -15,8 +15,8 @@ import (
 
 type bpf_infoEventEnter struct {
 	_    structs.HostLayout
-	Now  uint64
 	Path [80]int8
+	Now  uint64
 }
 
 // loadBpf_info returns the embedded CollectionSpec for bpf_info.
