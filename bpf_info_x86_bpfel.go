@@ -54,7 +54,6 @@ type bpf_infoSpecs struct {
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpf_infoProgramSpecs struct {
-	KprobeExecvePath    *ebpf.ProgramSpec `ebpf:"kprobe_execve_path"`
 	KretprobeExecveInfo *ebpf.ProgramSpec `ebpf:"kretprobe_execve_info"`
 }
 
@@ -63,7 +62,6 @@ type bpf_infoProgramSpecs struct {
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpf_infoMapSpecs struct {
 	EventsInfo *ebpf.MapSpec `ebpf:"events_info"`
-	PathMap    *ebpf.MapSpec `ebpf:"path_map"`
 }
 
 // bpf_infoVariableSpecs contains global variables before they are loaded into the kernel.
@@ -93,13 +91,11 @@ func (o *bpf_infoObjects) Close() error {
 // It can be passed to loadBpf_infoObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpf_infoMaps struct {
 	EventsInfo *ebpf.Map `ebpf:"events_info"`
-	PathMap    *ebpf.Map `ebpf:"path_map"`
 }
 
 func (m *bpf_infoMaps) Close() error {
 	return _Bpf_infoClose(
 		m.EventsInfo,
-		m.PathMap,
 	)
 }
 
@@ -113,13 +109,11 @@ type bpf_infoVariables struct {
 //
 // It can be passed to loadBpf_infoObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpf_infoPrograms struct {
-	KprobeExecvePath    *ebpf.Program `ebpf:"kprobe_execve_path"`
 	KretprobeExecveInfo *ebpf.Program `ebpf:"kretprobe_execve_info"`
 }
 
 func (p *bpf_infoPrograms) Close() error {
 	return _Bpf_infoClose(
-		p.KprobeExecvePath,
 		p.KretprobeExecveInfo,
 	)
 }
