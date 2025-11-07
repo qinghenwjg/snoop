@@ -8,16 +8,9 @@ import (
 	_ "embed"
 	"fmt"
 	"io"
-	"structs"
 
 	"github.com/cilium/ebpf"
 )
-
-type bpf_infoEventEnter struct {
-	_    structs.HostLayout
-	Path [80]int8
-	Now  uint64
-}
 
 // loadBpf_info returns the embedded CollectionSpec for bpf_info.
 func loadBpf_info() (*ebpf.CollectionSpec, error) {
@@ -70,7 +63,7 @@ type bpf_infoProgramSpecs struct {
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpf_infoMapSpecs struct {
 	EventsInfo *ebpf.MapSpec `ebpf:"events_info"`
-	ProcMap    *ebpf.MapSpec `ebpf:"proc_map"`
+	PathMap    *ebpf.MapSpec `ebpf:"path_map"`
 }
 
 // bpf_infoVariableSpecs contains global variables before they are loaded into the kernel.
@@ -100,13 +93,13 @@ func (o *bpf_infoObjects) Close() error {
 // It can be passed to loadBpf_infoObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpf_infoMaps struct {
 	EventsInfo *ebpf.Map `ebpf:"events_info"`
-	ProcMap    *ebpf.Map `ebpf:"proc_map"`
+	PathMap    *ebpf.Map `ebpf:"path_map"`
 }
 
 func (m *bpf_infoMaps) Close() error {
 	return _Bpf_infoClose(
 		m.EventsInfo,
-		m.ProcMap,
+		m.PathMap,
 	)
 }
 
