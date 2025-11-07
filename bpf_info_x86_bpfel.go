@@ -82,7 +82,6 @@ type bpf_infoMapSpecs struct {
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpf_infoVariableSpecs struct {
-	UnusedInfo *ebpf.VariableSpec `ebpf:"unused_info"`
 }
 
 // bpf_infoObjects contains all objects after they have been loaded into the kernel.
@@ -126,7 +125,6 @@ func (m *bpf_infoMaps) Close() error {
 //
 // It can be passed to loadBpf_infoObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpf_infoVariables struct {
-	UnusedInfo *ebpf.Variable `ebpf:"unused_info"`
 }
 
 // bpf_infoPrograms contains all programs after they have been loaded into the kernel.
