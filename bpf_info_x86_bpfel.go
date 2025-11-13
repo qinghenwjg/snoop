@@ -8,9 +8,15 @@ import (
 	_ "embed"
 	"fmt"
 	"io"
+	"structs"
 
 	"github.com/cilium/ebpf"
 )
+
+type bpf_infoEventEnter struct {
+	_    structs.HostLayout
+	Path [80]int8
+}
 
 // loadBpf_info returns the embedded CollectionSpec for bpf_info.
 func loadBpf_info() (*ebpf.CollectionSpec, error) {
@@ -54,6 +60,7 @@ type bpf_infoSpecs struct {
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpf_infoProgramSpecs struct {
+	KprobeExecvePath    *ebpf.ProgramSpec `ebpf:"kprobe_execve_path"`
 	KretprobeExecveInfo *ebpf.ProgramSpec `ebpf:"kretprobe_execve_info"`
 	KretprobeForkInfo   *ebpf.ProgramSpec `ebpf:"kretprobe_fork_info"`
 }
@@ -62,8 +69,9 @@ type bpf_infoProgramSpecs struct {
 //
 // It can be passed ebpf.CollectionSpec.Assign.
 type bpf_infoMapSpecs struct {
-	EventsFork *ebpf.MapSpec `ebpf:"events_fork"`
-	EventsInfo *ebpf.MapSpec `ebpf:"events_info"`
+	EventsFork  *ebpf.MapSpec `ebpf:"events_fork"`
+	EventsInfo  *ebpf.MapSpec `ebpf:"events_info"`
+	ProcPathMap *ebpf.MapSpec `ebpf:"proc_path_map"`
 }
 
 // bpf_infoVariableSpecs contains global variables before they are loaded into the kernel.
@@ -92,14 +100,16 @@ func (o *bpf_infoObjects) Close() error {
 //
 // It can be passed to loadBpf_infoObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpf_infoMaps struct {
-	EventsFork *ebpf.Map `ebpf:"events_fork"`
-	EventsInfo *ebpf.Map `ebpf:"events_info"`
+	EventsFork  *ebpf.Map `ebpf:"events_fork"`
+	EventsInfo  *ebpf.Map `ebpf:"events_info"`
+	ProcPathMap *ebpf.Map `ebpf:"proc_path_map"`
 }
 
 func (m *bpf_infoMaps) Close() error {
 	return _Bpf_infoClose(
 		m.EventsFork,
 		m.EventsInfo,
+		m.ProcPathMap,
 	)
 }
 
@@ -113,12 +123,14 @@ type bpf_infoVariables struct {
 //
 // It can be passed to loadBpf_infoObjects or ebpf.CollectionSpec.LoadAndAssign.
 type bpf_infoPrograms struct {
+	KprobeExecvePath    *ebpf.Program `ebpf:"kprobe_execve_path"`
 	KretprobeExecveInfo *ebpf.Program `ebpf:"kretprobe_execve_info"`
 	KretprobeForkInfo   *ebpf.Program `ebpf:"kretprobe_fork_info"`
 }
 
 func (p *bpf_infoPrograms) Close() error {
 	return _Bpf_infoClose(
+		p.KprobeExecvePath,
 		p.KretprobeExecveInfo,
 		p.KretprobeForkInfo,
 	)
